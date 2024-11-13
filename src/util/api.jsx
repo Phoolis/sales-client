@@ -1,29 +1,33 @@
 import axios from "axios";
 
-const url = "https://ticketguru.hellmanstudios.fi/api";
-
-const userName = "";
-const userPass = "";
-
-const authToken = btoa(`${userName}:${userPass}`);
-axios.defaults.headers.common["Authorization"] = `Basic ${authToken}`;
-
-const fetchEvents = async () => {
+const fetchEvents = async ({ url, userName, userPass }) => {
   try {
-    const response = await axios.get(url + "/events");
+    const response = await axios.get(`${url}/events`, {
+      headers: {
+        Authorization: `Basic ${btoa(`${userName}:${userPass}`)}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log("Error fetching events: ", error);
   }
 };
 
-const fetchTicketTypes = async ({ params }) => {
+const fetchTicketTypes = async ({
+  settings: { url, userName, userPass },
+  params,
+}) => {
   try {
-    const response = await axios.get(url + "/tickettypes/search", { params });
+    const response = await axios.get(`${url}/tickettypes/search`, {
+      headers: {
+        Authorization: `Basic ${btoa(`${userName}:${userPass}`)}`,
+      },
+      params: params,
+    });
     return response.data;
   } catch (error) {
     console.log("Error fetching ticket types: ", error);
   }
 };
 
-export { fetchEvents };
+export { fetchEvents, fetchTicketTypes };
