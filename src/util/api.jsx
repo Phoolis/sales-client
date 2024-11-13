@@ -13,10 +13,8 @@ const fetchEvents = async ({ url, userName, userPass }) => {
   }
 };
 
-const fetchTicketTypes = async ({
-  settings: { url, userName, userPass },
-  params,
-}) => {
+const fetchTicketTypes = async (settings, params) => {
+  const { url, userName, userPass } = settings;
   try {
     const response = await axios.get(`${url}/tickettypes/search`, {
       headers: {

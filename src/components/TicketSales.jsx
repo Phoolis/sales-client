@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EventDropDown from "./EventDropDown";
+import TicketTypeDropDown from "./TicketTypeDropDown";
 
 export default function TicketSales() {
   const [selectedEventId, setSelectedEventId] = useState(0);
@@ -10,7 +11,7 @@ export default function TicketSales() {
         selectedEventId={selectedEventId}
         setSelectedEventId={setSelectedEventId}
       />
-      <p>Selected eventId: {selectedEventId}</p>
+      <TicketTypeDropDown selectedEventId={selectedEventId} />
     </div>
   );
 }

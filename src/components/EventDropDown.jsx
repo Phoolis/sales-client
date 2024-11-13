@@ -36,6 +36,7 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
           </option>
         ))}
       </select>
+      <p>Selected eventId: {selectedEventId}</p>
     </div>
   );
 }
