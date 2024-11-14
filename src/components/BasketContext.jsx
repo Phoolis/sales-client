@@ -7,7 +7,7 @@ export const useBasket = () => useContext(BasketContext);
 export const BasketProvider = ({ children }) => {
   const [basket, setBasket] = useState([]);
 
-  const addToBasket = (ticketType, quantity, price) => {
+  const addToBasket = (ticketType, quantity, price, eventName) => {
     setBasket((prevBasket) => {
       // check if identical ticket type with identical price is already in the basket
       const existingItem = prevBasket.find(
@@ -29,7 +29,7 @@ export const BasketProvider = ({ children }) => {
       } else {
         return [
           ...prevBasket,
-          { ...ticketType, quantity: quantity, price: price },
+          { ...ticketType, quantity: quantity, price: price, eventName: eventName },
         ];
       }
     });

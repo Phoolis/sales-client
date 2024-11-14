@@ -5,10 +5,9 @@ import { postBasketItems } from "../util/api";
 import { useSettings } from "./SettingsContext";
 import { useState } from "react";
 
-export default function Basket({ selectedEventName }) {
+export default function Basket({ setSoldTicketsData }) {
   const { basket, setBasket } = useBasket();
   const settings = useSettings();
-  const [soldTicketsData, setSoldTicketsData] = useState(null);
 
   const handleConfirmSale = async () => {
     try {
@@ -17,6 +16,7 @@ export default function Basket({ selectedEventName }) {
       if (response.status === 201) {
         console.log(response.data);
         setSoldTicketsData(response.data);
+        handleClearBasket();
       }
     } catch (error) {
       console.error("Error posting basket: ", error);
@@ -34,7 +34,7 @@ export default function Basket({ selectedEventName }) {
         basket.map((item) => (
           <div key={`${item.eventId}-${item.id}-${item.price}`}>
             <p>
-              {selectedEventName} - {item.name} - {item.price}€ x{" "}
+              {item.eventName} - {item.name} - {item.price}€ x{" "}
               {item.quantity}
             </p>
           </div>
@@ -51,13 +51,6 @@ export default function Basket({ selectedEventName }) {
       </div>
       <button onClick={handleConfirmSale}>Confirm sale</button>
       <button onClick={handleClearBasket}>Clear basket</button>
-      {soldTicketsData && (
-        <div>
-          <p>Sale successful!</p>
-          <p>Sale posted at: {soldTicketsData.paidAt}</p>
-          <p>Sold by user: {soldTicketsData.userId}</p>
-        </div>
-      )}
     </div>
   );
 }

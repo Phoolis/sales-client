@@ -52,4 +52,19 @@ const postBasketItems = async (settings, basket) => {
   }
 };
 
-export { fetchEvents, fetchTicketTypes, postBasketItems };
+const fetchTickets = async (settings, ticketIds) => {
+  const { url, userName, userPass } = settings;
+  try {
+    const response = await axios.get(`${url}/tickets`, {
+      headers: {
+        Authorization: `Basic ${btoa(`${userName}:${userPass}`)}`,
+      },
+      params: { ids: ticketIds },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching ticket information: ", error);
+  }
+};
+
+export { fetchEvents, fetchTicketTypes, postBasketItems, fetchTickets };

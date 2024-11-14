@@ -3,7 +3,10 @@ import { fetchTicketTypes } from "../util/api";
 import { useSettings } from "./SettingsContext";
 import { useBasket } from "./BasketContext";
 
-export default function TicketTypeDropDown({ selectedEventId }) {
+export default function TicketTypeDropDown({
+  selectedEventId,
+  selectedEventName,
+}) {
   const settings = useSettings(); // url and auth header info
   const [ticketTypes, setTicketTypes] = useState([]);
   const [selectedTicketTypeId, setSelectedTicketTypeId] = useState(0);
@@ -45,8 +48,13 @@ export default function TicketTypeDropDown({ selectedEventId }) {
     }
   }, [selectedTicketTypeId, ticketTypes]);
 
-  const handleAddToBasket = (ticketType, quantity, price) => {
-    addToBasket(ticketType, quantity, price);
+  const handleAddToBasket = (
+    ticketType,
+    quantity,
+    price,
+    selectedEventName
+  ) => {
+    addToBasket(ticketType, quantity, price, selectedEventName);
   };
 
   const handlePriceChange = (e) => {
@@ -93,7 +101,14 @@ export default function TicketTypeDropDown({ selectedEventId }) {
             <input type="number" value={amount} onChange={handleAmountChange} />
           </label>
           <button
-            onClick={() => handleAddToBasket(selectedTicketType, amount, price)}
+            onClick={() =>
+              handleAddToBasket(
+                selectedTicketType,
+                amount,
+                price,
+                selectedEventName
+              )
+            }
           >
             Add to Basket
           </button>
