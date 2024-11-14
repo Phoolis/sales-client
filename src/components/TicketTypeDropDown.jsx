@@ -4,10 +4,10 @@ import { useSettings } from "./SettingsContext";
 import { useBasket } from "./BasketContext";
 
 export default function TicketTypeDropDown({ selectedEventId }) {
-  const settings = useSettings();
+  const settings = useSettings(); // url and auth header info
   const [ticketTypes, setTicketTypes] = useState([]);
   const [selectedTicketTypeId, setSelectedTicketTypeId] = useState(0);
-  const params = new URLSearchParams([["eventId", selectedEventId]]);
+  const params = new URLSearchParams([["eventId", selectedEventId]]); // query params to find ticketTypes by eventId
   const [selectedTicketType, setSelectedTicketType] = useState(null);
   const { addToBasket } = useBasket();
   const [price, setPrice] = useState(0);
@@ -18,7 +18,7 @@ export default function TicketTypeDropDown({ selectedEventId }) {
     const getTicketTypes = async () => {
       try {
         console.log("params: ", params);
-        const fetchedTicketTypes = await fetchTicketTypes(settings, params);
+        const fetchedTicketTypes = await fetchTicketTypes(settings, params); // pass settings and query params to api
         setTicketTypes(fetchedTicketTypes);
       } catch (error) {
         console.error(error);

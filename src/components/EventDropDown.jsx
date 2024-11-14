@@ -3,15 +3,13 @@ import { fetchEvents } from "../util/api";
 import { useSettings } from "./SettingsContext";
 
 export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
-  const settings = useSettings();
-  console.log(settings);
+  const settings = useSettings(); // url and auth header information
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     const getEvents = async () => {
       try {
-        console.log("Settings: ", JSON.stringify(settings));
         const fetchedEvents = await fetchEvents(settings);
         setEvents(fetchedEvents);
       } catch (error) {
@@ -22,6 +20,7 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   }, []);
 
   useEffect(() => {
+    // eventId passed from TicketSales
     if (selectedEventId !== 0) {
       const event = events.find((event) => event.id === selectedEventId);
       setSelectedEvent(event || null);
@@ -31,10 +30,11 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   }, [selectedEventId, events]);
 
   const handleChange = (e) => {
-    const eventId = Number(e.target.value);
+    const eventId = Number(e.target.value); // select returns a string, have to parse as number
     setSelectedEventId(eventId);
   };
 
+  // also pass the event name to TicketSales
   useEffect(() => {
     if (selectedEvent) {
       setSelectedEventId(selectedEventId, selectedEvent.name);
@@ -56,11 +56,15 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
       {selectedEvent && (
         <div>
           <h2>Selected Event:</h2>
-          {Object.entries(selectedEvent).map(([key, value]) => (
-            <p key={key}>
-              {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-            </p>
-          ))}
+
+          {
+            // Loop over event key value pairs (too lazy to write them all out by hand)
+            Object.entries(selectedEvent).map(([key, value]) => (
+              <p key={key}>
+                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+              </p>
+            ))
+          }
         </div>
       )}
     </div>

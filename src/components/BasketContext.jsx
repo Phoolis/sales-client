@@ -9,13 +9,14 @@ export const BasketProvider = ({ children }) => {
 
   const addToBasket = (ticketType, quantity, price) => {
     setBasket((prevBasket) => {
+      // check if identical ticket type with identical price is already in the basket
       const existingItem = prevBasket.find(
         (item) =>
           item.id === ticketType.id &&
           item.eventId === ticketType.eventId &&
           item.price === price
       );
-
+      // if above, add that ticket type by quantity
       if (existingItem) {
         return prevBasket.map((item) =>
           item.id === ticketType.id &&
@@ -24,6 +25,7 @@ export const BasketProvider = ({ children }) => {
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
+        // else, add new ticket type item to basket
       } else {
         return [
           ...prevBasket,
