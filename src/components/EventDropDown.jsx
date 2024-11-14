@@ -1,4 +1,3 @@
-// STUB drop-down menu for events
 import { useEffect, useState } from "react";
 import { fetchEvents } from "../util/api";
 import { useSettings } from "../util/SettingsContext";
@@ -7,7 +6,7 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   const settings = useSettings();
   console.log(settings);
   const [events, setEvents] = useState([]);
-  const params = new URLSearchParams([["eventId", selectedEventId]]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     const getEvents = async () => {
@@ -22,8 +21,17 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
     getEvents();
   }, []);
 
+  useEffect(() => {
+    if (selectedEventId !== 0) {
+      const event = events.find((event) => event.id === selectedEventId);
+      setSelectedEvent(event || null);
+    } else {
+      setSelectedEvent(null);
+    }
+  }, [selectedEventId, events]);
+
   const handleChange = (e) => {
-    setSelectedEventId(e.target.value);
+    setSelectedEventId(Number(e.target.value));
   };
 
   return (
@@ -37,6 +45,16 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
         ))}
       </select>
       <p>Selected eventId: {selectedEventId}</p>
+      {selectedEvent && (
+        <div>
+          <h2>Selected Event:</h2>
+          {Object.entries(selectedEvent).map(([key, value]) => (
+            <p key={key}>
+              {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+            </p>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
