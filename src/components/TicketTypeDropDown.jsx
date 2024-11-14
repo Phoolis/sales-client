@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchTicketTypes } from "../util/api";
-import { useSettings } from "../util/SettingsContext";
+import { useSettings } from "./SettingsContext";
+import { useBasket } from "./BasketContext";
 
 export default function TicketTypeDropDown({ selectedEventId }) {
   const settings = useSettings();
@@ -8,6 +9,9 @@ export default function TicketTypeDropDown({ selectedEventId }) {
   const [selectedTicketTypeId, setSelectedTicketTypeId] = useState(0);
   const params = new URLSearchParams([["eventId", selectedEventId]]);
   const [selectedTicketType, setSelectedTicketType] = useState(null);
+  const { addToBasket } = useBasket();
+  const [price, setPrice] = useState(0);
+  const [amount, setAmount] = useState(1);
 
   useEffect(() => {
     if (selectedEventId == 0) return;
@@ -33,10 +37,24 @@ export default function TicketTypeDropDown({ selectedEventId }) {
         (ticketType) => ticketType.id === selectedTicketTypeId
       );
       setSelectedTicketType(ticketType || null);
+      setPrice(ticketType.retailPrice);
     } else {
       setSelectedTicketType(null); // Clear if no valid selection
+      setPrice(0);
     }
   }, [selectedTicketTypeId, ticketTypes]);
+
+  const handleAddToBasket = (ticketType, quantity, price) => {
+    addToBasket(ticketType, quantity, price);
+  };
+
+  const handlePriceChange = (e) => {
+    setPrice(Number(e.target.value));
+  };
+
+  const handleAmountChange = (e) => {
+    setAmount(Number(e.target.value));
+  };
 
   return (
     <div>
@@ -58,8 +76,26 @@ export default function TicketTypeDropDown({ selectedEventId }) {
           <h2>Selected Ticket Type:</h2>
           <p>ID: {selectedTicketType.id}</p>
           <p>Name: {selectedTicketType.name}</p>
-          <p>Price: {selectedTicketType.retailPrice}</p>
+          <p>Retail price: {selectedTicketType.retailPrice}</p>
           <p>Available: {selectedTicketType.totalAvailable}</p>
+          <label>
+            Price:
+            <input
+              type="number"
+              value={price}
+              onChange={handlePriceChange}
+              step={0.01}
+            />
+          </label>
+          <label>
+            Amount:
+            <input type="number" value={amount} onChange={handleAmountChange} />
+          </label>
+          <button
+            onClick={() => handleAddToBasket(selectedTicketType, amount, price)}
+          >
+            Add to Basket
+          </button>
         </div>
       ) : (
         selectedTicketTypeId !== 0 && <p>Loading ticket type details...</p>

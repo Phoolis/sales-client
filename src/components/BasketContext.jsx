@@ -1,0 +1,41 @@
+import { createContext, useContext, useState } from "react";
+
+const BasketContext = createContext();
+
+export const useBasket = () => useContext(BasketContext);
+
+export const BasketProvider = ({ children }) => {
+  const [basket, setBasket] = useState([]);
+
+  const addToBasket = (ticketType, quantity, price) => {
+    setBasket((prevBasket) => {
+      const existingItem = prevBasket.find(
+        (item) =>
+          item.id === ticketType.id &&
+          item.eventId === ticketType.eventId &&
+          item.price === price
+      );
+
+      if (existingItem) {
+        return prevBasket.map((item) =>
+          item.id === ticketType.id &&
+          item.eventId === ticketType.eventId &&
+          item.price === price
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      } else {
+        return [
+          ...prevBasket,
+          { ...ticketType, quantity: quantity, price: price },
+        ];
+      }
+    });
+  };
+
+  return (
+    <BasketContext.Provider value={{ basket, addToBasket }}>
+      {children}
+    </BasketContext.Provider>
+  );
+};

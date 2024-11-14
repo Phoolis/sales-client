@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchEvents } from "../util/api";
-import { useSettings } from "../util/SettingsContext";
+import { useSettings } from "./SettingsContext";
 
 export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   const settings = useSettings();
@@ -31,8 +31,16 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   }, [selectedEventId, events]);
 
   const handleChange = (e) => {
-    setSelectedEventId(Number(e.target.value));
+    const eventId = Number(e.target.value);
+    setSelectedEventId(eventId);
   };
+
+  useEffect(() => {
+    if (selectedEvent) {
+      setSelectedEventId(selectedEventId, selectedEvent.name);
+      console.log(selectedEvent.name);
+    }
+  }, [selectedEvent]);
 
   return (
     <div>

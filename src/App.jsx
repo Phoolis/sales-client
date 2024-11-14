@@ -1,11 +1,14 @@
 import "./App.css";
 import TicketSales from "./components/TicketSales";
-import { SettingsProvider } from "./util/SettingsContext";
+import { SettingsProvider } from "./components/SettingsContext";
+import { BasketProvider } from "./components/BasketContext";
 
 function App() {
   return (
     <SettingsProvider>
-      <TicketSales />
+      <BasketProvider>
+        <TicketSales />
+      </BasketProvider>
     </SettingsProvider>
   );
 }
