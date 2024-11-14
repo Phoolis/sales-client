@@ -1,5 +1,5 @@
 import "./App.css";
-import TicketSales from "./components/TicketSales";
+import TicketSales from "./TicketSales";
 import { SettingsProvider } from "./components/SettingsContext";
 import { BasketProvider } from "./components/BasketContext";
 

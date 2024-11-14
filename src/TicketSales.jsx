@@ -1,8 +1,8 @@
 import { useState } from "react";
-import EventDropDown from "./EventDropDown";
-import TicketTypeDropDown from "./TicketTypeDropDown";
-import Basket from "./Basket";
-import SoldTicketsList from "./SoldTicketsList";
+import EventDropDown from "./components/EventDropDown";
+import TicketOrderControl from "./components/TicketOrderControl";
+import Basket from "./components/Basket";
+import SoldTicketsList from "./components/SoldTicketsList";
 
 export default function TicketSales() {
   const [selectedEventId, setSelectedEventId] = useState(0);
@@ -24,7 +24,7 @@ export default function TicketSales() {
         selectedEventId={selectedEventId}
         setSelectedEventId={handleEventSelect}
       />
-      <TicketTypeDropDown
+      <TicketOrderControl
         selectedEventId={selectedEventId}
         selectedEventName={selectedEventName}
       />

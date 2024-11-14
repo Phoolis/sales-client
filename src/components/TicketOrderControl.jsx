@@ -3,7 +3,7 @@ import { fetchTicketTypes } from "../util/api";
 import { useSettings } from "./SettingsContext";
 import { useBasket } from "./BasketContext";
 
-export default function TicketTypeDropDown({
+export default function TicketOrderControl({
   selectedEventId,
   selectedEventName,
 }) {
