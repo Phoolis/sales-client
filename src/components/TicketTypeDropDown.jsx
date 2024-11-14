@@ -15,6 +15,7 @@ export default function TicketTypeDropDown({ selectedEventId }) {
 
   useEffect(() => {
     if (selectedEventId == 0) return;
+    setSelectedTicketTypeId(0); // clear tickettype selection when selectedEventId changes
     const getTicketTypes = async () => {
       try {
         console.log("params: ", params);
