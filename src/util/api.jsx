@@ -28,4 +28,28 @@ const fetchTicketTypes = async (settings, params) => {
   }
 };
 
-export { fetchEvents, fetchTicketTypes };
+const postBasketItems = async (settings, basket) => {
+  const { url, userName, userPass } = settings;
+  const ticketItems = basket.map((item) => ({
+    ticketTypeId: item.id,
+    quantity: item.quantity,
+    price: item.price,
+  }));
+  try {
+    const response = await axios.post(
+      `${url}/sales/confirm`,
+      { ticketItems },
+      {
+        headers: {
+          Authorization: `Basic ${btoa(`${userName}:${userPass}`)}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response; // return the whole response object to access the status code
+  } catch (error) {
+    console.error("Error posting basket items: ", error);
+  }
+};
+
+export { fetchEvents, fetchTicketTypes, postBasketItems };
