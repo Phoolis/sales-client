@@ -8,8 +8,8 @@ export const useSettings = () => {
 
 export const SettingsProvider = ({ children }) => {
   const settings = {
-    url: "http://localhost:8080/api",
-    //url: "https://ticketguru.hellmanstudios.fi/api",
+    //url: "http://localhost:8080/api",
+    url: "https://ticketguru.hellmanstudios.fi/api",
     userName: "salesperson@test.com",
     userPass: "salesperson",
   };
