@@ -9,6 +9,9 @@ import {
   TableRow,
   TableBody,
 } from "@mui/material";
+import { PDFViewer } from "@react-pdf/renderer";
+
+import Ticket from "./Ticket";
 
 export default function SoldTicketsList({ soldTicketsData }) {
   const [tickets, setTickets] = useState([]);
@@ -62,6 +65,9 @@ export default function SoldTicketsList({ soldTicketsData }) {
               ))}
             </TableBody>
           </Table>
+          <PDFViewer width="100%" height="600px">
+            <Ticket tickets={tickets} />
+          </PDFViewer>
         </>
       )}
     </>
