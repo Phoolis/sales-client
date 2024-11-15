@@ -29,14 +29,25 @@ export const BasketProvider = ({ children }) => {
       } else {
         return [
           ...prevBasket,
-          { ...ticketType, quantity: quantity, price: price, eventName: eventName },
+          {
+            ...ticketType,
+            quantity: quantity,
+            price: price,
+            eventName: eventName,
+          },
         ];
       }
     });
   };
 
+  //TODO: Add way to remove item from basket
+  const removeFromBasket = (id) => {
+    setBasket((prevBasket) => prevBasket.filter((item) => item.id !== id));
+  };
+
   return (
-    <BasketContext.Provider value={{ basket, setBasket, addToBasket }}>
+    <BasketContext.Provider
+      value={{ basket, setBasket, addToBasket, removeFromBasket }}>
       {children}
     </BasketContext.Provider>
   );

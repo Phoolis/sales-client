@@ -8,7 +8,7 @@ import { useSettings } from "./SettingsContext";
 import { useState, useMemo } from "react";
 
 export default function Basket({ setSoldTicketsData }) {
-  const { basket, setBasket } = useBasket();
+  const { basket, setBasket, removeFromBasket } = useBasket();
   const settings = useSettings();
 
   const [columnDefs, setColumnDefs] = useState([
@@ -20,6 +20,12 @@ export default function Basket({ setSoldTicketsData }) {
       headerName: "Subtotal (€)",
       valueGetter: (params) => params.data.price * params.data.quantity,
       valueFormatter: (params) => params.value.toFixed(2),
+    },
+    {
+      headerName: "",
+      cellRenderer: (params) => (
+        <Button onClick={() => removeFromBasket(params.data.id)}>Delete</Button>
+      ),
     },
   ]);
 
@@ -49,11 +55,10 @@ export default function Basket({ setSoldTicketsData }) {
   return (
     <>
       <div
-        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}
-      >
+        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}>
         Grand Total: {grandTotal}€
       </div>
-      <div className="ag-theme-material" style={{ height: 400 }}>
+      <div className='ag-theme-material' style={{ height: 400 }}>
         <AgGridReact
           rowData={basket}
           columnDefs={columnDefs}
@@ -61,10 +66,10 @@ export default function Basket({ setSoldTicketsData }) {
         />
       </div>
 
-      <Button color="success" variant="contained" onClick={handleConfirmSale}>
+      <Button color='success' variant='contained' onClick={handleConfirmSale}>
         Confirm sale
       </Button>
-      <Button color="error" onClick={handleClearBasket}>
+      <Button color='error' onClick={handleClearBasket}>
         Clear basket
       </Button>
     </>
