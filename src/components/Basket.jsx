@@ -24,6 +24,7 @@ export default function Basket({ setSoldTicketsData }) {
   ]);
 
   const handleConfirmSale = async () => {
+    if (!basket || basket.length === 0) return;
     try {
       const response = await postBasketItems(settings, basket);
       if (response.status === 201) {

@@ -35,8 +35,10 @@ export default function TicketSales() {
           />
         </Box>
       </Stack>
-      <Basket setSoldTicketsData={handleSetSoldTicketsData} />
-      <SoldTicketsList soldTicketsData={soldTicketsData} />
+      <Stack direction="column" spacing={2} width={1020}>
+        <Basket setSoldTicketsData={handleSetSoldTicketsData} />
+        <SoldTicketsList soldTicketsData={soldTicketsData} />
+      </Stack>
     </>
   );
 }
