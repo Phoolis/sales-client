@@ -1,3 +1,16 @@
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  Box,
+  MenuItem,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  Stack,
+} from "@mui/material";
+
 import { useEffect, useState } from "react";
 import { fetchEvents } from "../util/api";
 import { useSettings } from "./SettingsContext";
@@ -30,7 +43,7 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   }, [selectedEventId, events]);
 
   const handleChange = (e) => {
-    const eventId = Number(e.target.value); // select returns a string, have to parse as number
+    const eventId = e.target.value;
     setSelectedEventId(eventId);
   };
 
@@ -43,30 +56,38 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   }, [selectedEvent]);
 
   return (
-    <div>
-      <select id="eventSelect" value={selectedEventId} onChange={handleChange}>
-        <option value="0">Select an event</option>
-        {events.map((event) => (
-          <option key={event.id} value={event.id}>
-            {event.name}
-          </option>
-        ))}
-      </select>
-      <p>Selected eventId: {selectedEventId}</p>
+    <Stack>
+        <FormControl fullWidth>
+          <InputLabel>Event</InputLabel>
+          <Select
+            id="eventSelect"
+            value={selectedEventId}
+            onChange={handleChange}
+            label="Event"
+          >
+            <MenuItem value={0}>Select an event</MenuItem>
+            {events.map((event) => (
+              <MenuItem key={event.id} value={event.id}>
+                {event.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      {console.log("Selected eventId", selectedEventId)}
       {selectedEvent && (
-        <div>
-          <h2>Selected Event:</h2>
-
-          {
-            // Loop over event key value pairs (too lazy to write them all out by hand)
-            Object.entries(selectedEvent).map(([key, value]) => (
-              <p key={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-              </p>
-            ))
-          }
-        </div>
+          <Table size="small">
+            <TableBody>
+              {Object.entries(selectedEvent).map(([key, value]) => (
+                <TableRow key={key}>
+                  <TableCell>
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                  </TableCell>
+                  <TableCell>{value}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
       )}
-    </div>
+    </Stack>
   );
 }

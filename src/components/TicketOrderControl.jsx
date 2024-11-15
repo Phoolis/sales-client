@@ -1,7 +1,22 @@
+import Button from "@mui/material/Button";
+
 import { useEffect, useState } from "react";
 import { fetchTicketTypes } from "../util/api";
 import { useSettings } from "./SettingsContext";
 import { useBasket } from "./BasketContext";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Stack,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 
 export default function TicketOrderControl({
   selectedEventId,
@@ -42,9 +57,11 @@ export default function TicketOrderControl({
       );
       setSelectedTicketType(ticketType || null);
       setPrice(ticketType.retailPrice);
+      setAmount(1);
     } else {
       setSelectedTicketType(null); // Clear if no valid selection
       setPrice(0);
+      setAmount(1);
     }
   }, [selectedTicketTypeId, ticketTypes]);
 
@@ -66,41 +83,85 @@ export default function TicketOrderControl({
   };
 
   return (
-    <div>
-      <select
-        id="ticketTypeSelect"
-        value={selectedTicketTypeId}
-        onChange={handleChange}
-      >
-        <option value="0">Select ticket type</option>
-        {ticketTypes.map((ticketType) => (
-          <option key={ticketType.id} value={ticketType.id}>
-            {ticketType.name}
-          </option>
-        ))}
-      </select>
-      <p>Selected ticketTypeId: {selectedTicketTypeId}</p>
-      {selectedTicketType ? (
-        <div>
-          <h2>Selected Ticket Type:</h2>
-          <p>ID: {selectedTicketType.id}</p>
-          <p>Name: {selectedTicketType.name}</p>
-          <p>Retail price: {selectedTicketType.retailPrice}</p>
-          <p>Available: {selectedTicketType.totalAvailable}</p>
-          <label>
-            Price:
-            <input
-              type="number"
-              value={price}
-              onChange={handlePriceChange}
-              step={0.01}
-            />
-          </label>
-          <label>
-            Amount:
-            <input type="number" value={amount} onChange={handleAmountChange} />
-          </label>
-          <button
+    <Stack>
+      <>
+        <FormControl fullWidth>
+          <InputLabel>Ticket type</InputLabel>
+          <Select
+            id="ticketTypeSelect"
+            value={selectedTicketTypeId}
+            onChange={handleChange}
+            label="Ticket type"
+          >
+            <MenuItem value={0}>Select ticket type</MenuItem>
+            {ticketTypes.map((ticketType) => (
+              <MenuItem key={ticketType.id} value={ticketType.id}>
+                {ticketType.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </>
+
+      {selectedTicketType && (
+        <>
+          <Table size="small">
+            <TableBody>
+              <TableRow>
+                <TableCell>Ticket type</TableCell>
+                <TableCell>{selectedTicketType.name}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Retail price</TableCell>
+                <TableCell>{selectedTicketType.retailPrice} €</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Available</TableCell>
+                <TableCell>{selectedTicketType.totalAvailable}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <TextField
+                    label="Price"
+                    type="number"
+                    value={price}
+                    onChange={handlePriceChange}
+                    slotProps={{
+                      htmlInput: {
+                        step: 0.01,
+                      },
+                      input: {
+                        endAdornment: (
+                          <InputAdornment position="end">€</InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    label="Amount"
+                    type="number"
+                    value={amount}
+                    onChange={handleAmountChange}
+                    slotProps={{
+                      input: {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            tickets
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+          <Button
+            color="primary"
+            variant="contained"
             onClick={() =>
               handleAddToBasket(
                 selectedTicketType,
@@ -111,11 +172,9 @@ export default function TicketOrderControl({
             }
           >
             Add to Basket
-          </button>
-        </div>
-      ) : (
-        selectedTicketTypeId !== 0 && <p>Loading ticket type details...</p>
+          </Button>
+        </>
       )}
-    </div>
+    </Stack>
   );
 }

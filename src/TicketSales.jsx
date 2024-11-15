@@ -3,6 +3,7 @@ import EventDropDown from "./components/EventDropDown";
 import TicketOrderControl from "./components/TicketOrderControl";
 import Basket from "./components/Basket";
 import SoldTicketsList from "./components/SoldTicketsList";
+import { Stack, Box } from "@mui/material";
 
 export default function TicketSales() {
   const [selectedEventId, setSelectedEventId] = useState(0);
@@ -19,17 +20,23 @@ export default function TicketSales() {
   };
 
   return (
-    <div>
-      <EventDropDown
-        selectedEventId={selectedEventId}
-        setSelectedEventId={handleEventSelect}
-      />
-      <TicketOrderControl
-        selectedEventId={selectedEventId}
-        selectedEventName={selectedEventName}
-      />
+    <>
+      <Stack direction="row" spacing={2}>
+        <Box sx={{ m: 1, width: 500 }}>
+          <EventDropDown
+            selectedEventId={selectedEventId}
+            setSelectedEventId={handleEventSelect}
+          />
+        </Box>
+        <Box sx={{ m: 1, width: 500 }}>
+          <TicketOrderControl
+            selectedEventId={selectedEventId}
+            selectedEventName={selectedEventName}
+          />
+        </Box>
+      </Stack>
       <Basket setSoldTicketsData={handleSetSoldTicketsData} />
       <SoldTicketsList soldTicketsData={soldTicketsData} />
-    </div>
+    </>
   );
 }

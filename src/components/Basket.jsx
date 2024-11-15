@@ -1,5 +1,7 @@
-// STUB shopping basket for tickets
-// tickettypes, amounts, and prices selected for the sale are displayed here
+import Button from "@mui/material/Button";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-material.css";
 import { useBasket } from "./BasketContext";
 import { postBasketItems } from "../util/api";
 import { useSettings } from "./SettingsContext";
@@ -8,6 +10,13 @@ import { useState } from "react";
 export default function Basket({ setSoldTicketsData }) {
   const { basket, setBasket } = useBasket();
   const settings = useSettings();
+
+  const [columnDefs, setColumnDefs] = useState([
+    { field: "eventName" },
+    { field: "name" },
+    { field: "price" },
+    { field: "quantity" },
+  ]);
 
   const handleConfirmSale = async () => {
     try {
@@ -28,20 +37,11 @@ export default function Basket({ setSoldTicketsData }) {
   };
 
   return (
-    <div>
-      <h2>Shopping Basket</h2>
-      {basket.length > 0 ? (
-        basket.map((item) => (
-          <div key={`${item.eventId}-${item.id}-${item.price}`}>
-            <p>
-              {item.eventName} - {item.name} - {item.price}€ x{" "}
-              {item.quantity}
-            </p>
-          </div>
-        ))
-      ) : (
-        <p>Your basket is empty.</p>
-      )}
+    <>
+      <div className="ag-theme-material" style={{ height: 500 }}>
+        {console.log(basket)}
+        <AgGridReact rowData={basket} columnDefs={columnDefs} />
+      </div>
       <div>
         Total:{" "}
         {basket
@@ -49,8 +49,12 @@ export default function Basket({ setSoldTicketsData }) {
           .toFixed(2)}
         €
       </div>
-      <button onClick={handleConfirmSale}>Confirm sale</button>
-      <button onClick={handleClearBasket}>Clear basket</button>
-    </div>
+      <Button color="success" variant="contained" onClick={handleConfirmSale}>
+        Confirm sale
+      </Button>
+      <Button color="error" onClick={handleClearBasket}>
+        Clear basket
+      </Button>
+    </>
   );
 }
