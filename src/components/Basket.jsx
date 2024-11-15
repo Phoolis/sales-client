@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import { Add, DeleteForever, Remove } from "@mui/icons-material";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-material.css";
@@ -8,26 +9,41 @@ import { useSettings } from "./SettingsContext";
 import { useState, useMemo } from "react";
 
 export default function Basket({ setSoldTicketsData }) {
-  const { basket, setBasket, removeFromBasket } = useBasket();
+  const { basket, setBasket, removeFromBasket, plusOneTicket, minusOneTicket } =
+    useBasket();
   const settings = useSettings();
 
   const [columnDefs, setColumnDefs] = useState([
     { field: "eventName" },
-    { field: "name" },
-    { field: "price" },
-    { field: "quantity" },
+    { field: "name", width: 120 },
+    { field: "price", width: 100 },
+    { field: "quantity", width: 100 },
     {
-      headerName: "Subtotal (€)",
+      headerName: "Subtotal (€)", width: 100,
       valueGetter: (params) => params.data.price * params.data.quantity,
       valueFormatter: (params) => params.value.toFixed(2),
     },
     {
       headerName: "",
       cellRenderer: (params) => (
-        <Button onClick={() => removeFromBasket(params.data.id)}>Delete</Button>
+        <>
+          <Button color="primary" onClick={() => plusOneTicket(params.data)}>
+            <Add />
+          </Button>
+          <Button color="primary" onClick={() => minusOneTicket(params.data)}>
+            <Remove />
+          </Button>
+          <Button color="error" onClick={() => removeFromBasket(params.data)}>
+            <DeleteForever />
+          </Button>
+        </>
       ),
     },
   ]);
+
+  const autoSizeStrategy = {
+    type: "fitGridWidth",
+  };
 
   const handleConfirmSale = async () => {
     if (!basket || basket.length === 0) return;
@@ -55,21 +71,23 @@ export default function Basket({ setSoldTicketsData }) {
   return (
     <>
       <div
-        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}>
+        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}
+      >
         Grand Total: {grandTotal}€
       </div>
-      <div className='ag-theme-material' style={{ height: 400 }}>
+      <div className="ag-theme-material" style={{ height: 400 }}>
         <AgGridReact
           rowData={basket}
           columnDefs={columnDefs}
           groupTotalRow={true}
+          autoSizeStrategy={autoSizeStrategy}
         />
       </div>
 
-      <Button color='success' variant='contained' onClick={handleConfirmSale}>
+      <Button color="success" variant="contained" onClick={handleConfirmSale}>
         Confirm sale
       </Button>
-      <Button color='error' onClick={handleClearBasket}>
+      <Button color="error" onClick={handleClearBasket}>
         Clear basket
       </Button>
     </>

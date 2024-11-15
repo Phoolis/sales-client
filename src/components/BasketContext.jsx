@@ -41,13 +41,40 @@ export const BasketProvider = ({ children }) => {
   };
 
   //TODO: Add way to remove item from basket
-  const removeFromBasket = (id) => {
-    setBasket((prevBasket) => prevBasket.filter((item) => item.id !== id));
+  const removeFromBasket = (data) => {
+    setBasket((prevBasket) => prevBasket.filter((item) => item !== data));
+  };
+
+  const plusOneTicket = (data) => {
+    setBasket((prevBasket) =>
+      prevBasket.map((item) =>
+        item === data ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  const minusOneTicket = (data) => {
+    if (data.quantity == 1) {
+      removeFromBasket(data);
+    }
+    setBasket((prevBasket) =>
+      prevBasket.map((item) =>
+        item === data ? { ...item, quantity: item.quantity - 1 } : item
+      )
+    );
   };
 
   return (
     <BasketContext.Provider
-      value={{ basket, setBasket, addToBasket, removeFromBasket }}>
+      value={{
+        basket,
+        setBasket,
+        addToBasket,
+        removeFromBasket,
+        plusOneTicket,
+        minusOneTicket,
+      }}
+    >
       {children}
     </BasketContext.Provider>
   );
