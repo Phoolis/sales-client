@@ -101,79 +101,74 @@ export default function TicketOrderControl({
           </Select>
         </FormControl>
       </>
+      <>
+        <Table size="small">
+          <TableBody>
+            <TableRow>
+              <TableCell>Ticket type</TableCell>
+              <TableCell>{selectedTicketType?.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Retail price</TableCell>
+              <TableCell>{selectedTicketType?.retailPrice} €</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Available</TableCell>
+              <TableCell>{selectedTicketType?.totalAvailable}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <TextField
+                  label="Price"
+                  type="number"
+                  value={price}
+                  onChange={handlePriceChange}
+                  slotProps={{
+                    htmlInput: {
+                      step: 0.01,
+                    },
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">€</InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  label="Amount"
+                  type="number"
+                  value={amount}
+                  onChange={handleAmountChange}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">tickets</InputAdornment>
+                      ),
+                    },
+                  }}
+                />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
 
-      {selectedTicketType && (
-        <>
-          <Table size="small">
-            <TableBody>
-              <TableRow>
-                <TableCell>Ticket type</TableCell>
-                <TableCell>{selectedTicketType.name}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Retail price</TableCell>
-                <TableCell>{selectedTicketType.retailPrice} €</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Available</TableCell>
-                <TableCell>{selectedTicketType.totalAvailable}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>
-                  <TextField
-                    label="Price"
-                    type="number"
-                    value={price}
-                    onChange={handlePriceChange}
-                    slotProps={{
-                      htmlInput: {
-                        step: 0.01,
-                      },
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">€</InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    label="Amount"
-                    type="number"
-                    value={amount}
-                    onChange={handleAmountChange}
-                    slotProps={{
-                      input: {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            tickets
-                          </InputAdornment>
-                        ),
-                      },
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() =>
-              handleAddToBasket(
-                selectedTicketType,
-                amount,
-                price,
-                selectedEventName
-              )
-            }
-          >
-            Add to Basket
-          </Button>
-        </>
-      )}
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() =>
+            handleAddToBasket(
+              selectedTicketType,
+              amount,
+              price,
+              selectedEventName
+            )
+          }
+        >
+          Add to Basket
+        </Button>
+      </>
     </Stack>
   );
 }

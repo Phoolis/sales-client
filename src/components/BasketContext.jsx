@@ -54,6 +54,7 @@ export const BasketProvider = ({ children }) => {
   };
 
   const minusOneTicket = (data) => {
+    // if removing the last ticket, remove whole row instead
     if (data.quantity == 1) {
       removeFromBasket(data);
     }

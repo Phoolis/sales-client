@@ -2,7 +2,6 @@ import {
   FormControl,
   InputLabel,
   Select,
-  Box,
   MenuItem,
   Table,
   TableBody,
@@ -56,36 +55,50 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
 
   return (
     <Stack>
-        <FormControl fullWidth>
-          <InputLabel>Event</InputLabel>
-          <Select
-            id="eventSelect"
-            value={selectedEventId}
-            onChange={handleChange}
-            label="Event"
-          >
-            <MenuItem value={0}>Select an event</MenuItem>
-            {events.map((event) => (
-              <MenuItem key={event.id} value={event.id}>
-                {event.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      {selectedEvent && (
-          <Table size="small">
-            <TableBody>
-              {Object.entries(selectedEvent).map(([key, value]) => (
-                <TableRow key={key}>
-                  <TableCell>
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </TableCell>
-                  <TableCell>{value}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-      )}
+      <FormControl fullWidth>
+        <InputLabel>Event</InputLabel>
+        <Select
+          id="eventSelect"
+          value={selectedEventId}
+          onChange={handleChange}
+          label="Event"
+        >
+          <MenuItem value={0}>Select an event</MenuItem>
+          {events.map((event) => (
+            <MenuItem key={event.id} value={event.id}>
+              {event.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Table size="small">
+        <TableBody>
+          <TableRow>
+            <TableCell>Event name</TableCell>
+            <TableCell>{selectedEvent?.name || ""}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Description</TableCell>
+            <TableCell>{selectedEvent?.description || ""}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Total tickets</TableCell>
+            <TableCell>{selectedEvent?.totalTickets || ""}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Event begins</TableCell>
+            <TableCell>{selectedEvent?.beginsAt || ""}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Event ends</TableCell>
+            <TableCell>{selectedEvent?.endsAt || ""}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Ticket sale begins </TableCell>
+            <TableCell>{selectedEvent?.ticketSaleBegins || ""}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </Stack>
   );
 }
