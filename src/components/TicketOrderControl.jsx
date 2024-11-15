@@ -36,7 +36,6 @@ export default function TicketOrderControl({
     setSelectedTicketTypeId(0); // clear tickettype selection when selectedEventId changes
     const getTicketTypes = async () => {
       try {
-        console.log("params: ", params);
         const fetchedTicketTypes = await fetchTicketTypes(settings, params); // pass settings and query params to api
         setTicketTypes(fetchedTicketTypes);
       } catch (error) {

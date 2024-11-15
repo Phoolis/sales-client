@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSettings } from "./SettingsContext";
 import { fetchTickets } from "../util/api";
+import {
+  Box,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableBody,
+} from "@mui/material";
 
 export default function SoldTicketsList({ soldTicketsData }) {
   const [tickets, setTickets] = useState([]);
@@ -11,7 +19,6 @@ export default function SoldTicketsList({ soldTicketsData }) {
     const getTickets = async () => {
       try {
         const ticketIds = soldTicketsData.ticketIds.toString();
-        console.log("ticketIds: ", ticketIds);
         const fetchedTickets = await fetchTickets(settings, ticketIds);
         setTickets(fetchedTickets);
       } catch (error) {
@@ -22,36 +29,41 @@ export default function SoldTicketsList({ soldTicketsData }) {
   }, [soldTicketsData]);
 
   return (
-    <div>
+    <>
       {soldTicketsData && (
-        <div>
-          <p>Sale event {soldTicketsData.id} successful!</p>
-          <p>Sale posted at: {soldTicketsData.paidAt}</p>
-          <p>Sold by user: {soldTicketsData.userId}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>Ticket type</th>
-                <th>Venue</th>
-                <th>Price</th>
-                <th>Barcode</th>
-              </tr>
-            </thead>
-            <tbody>
+        <>
+          <Box sx={{ p: 2, border: "1px dashed grey" }}>
+            <strong>Sale event {soldTicketsData.id} successful!</strong>
+            <br />
+            <strong>Sale posted at: {soldTicketsData.paidAt}</strong>
+            <br />
+            <strong>Sold by user: {soldTicketsData.userId}</strong>
+            <br />
+          </Box>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Event</TableCell>
+                <TableCell>Ticket type</TableCell>
+                <TableCell>Venue</TableCell>
+                <TableCell>Price</TableCell>
+                <TableCell>Barcode</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {tickets.map((ticket, index) => (
-                <tr key={index}>
-                  <td>{ticket.event.name}</td>
-                  <td>{ticket.ticketType.name}</td>
-                  <td>{ticket.venue.name}</td>
-                  <td>{ticket.price.toFixed(2)}</td>
-                  <td>{ticket.barcode}</td>
-                </tr>
+                <TableRow key={index}>
+                  <TableCell>{ticket.event.name}</TableCell>
+                  <TableCell>{ticket.ticketType.name}</TableCell>
+                  <TableCell>{ticket.venue.name}</TableCell>
+                  <TableCell>{ticket.price.toFixed(2)}</TableCell>
+                  <TableCell>{ticket.barcode}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </>
       )}
-    </div>
+    </>
   );
 }

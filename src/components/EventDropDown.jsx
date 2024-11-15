@@ -51,7 +51,6 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   useEffect(() => {
     if (selectedEvent) {
       setSelectedEventId(selectedEventId, selectedEvent.name);
-      console.log(selectedEvent.name);
     }
   }, [selectedEvent]);
 
@@ -73,7 +72,6 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
             ))}
           </Select>
         </FormControl>
-      {console.log("Selected eventId", selectedEventId)}
       {selectedEvent && (
           <Table size="small">
             <TableBody>
