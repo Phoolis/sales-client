@@ -8,12 +8,18 @@ import Container from "@mui/material/Container";
 import TicketSales from "./TicketSales";
 import { SettingsProvider } from "./components/SettingsContext";
 import { BasketProvider } from "./components/BasketContext";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
 function App() {
   return (
     <SettingsProvider>
       <BasketProvider>
-        <Container maxWidth="xl">
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">TicketGuru</Typography>
+          </Toolbar>
+        </AppBar>
+        <Container maxWidth="xl" sx={{ mt: 3, mb: 1 }}>
           <TicketSales />
         </Container>
       </BasketProvider>
