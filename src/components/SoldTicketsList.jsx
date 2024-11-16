@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { PDFViewer } from "@react-pdf/renderer";
 
+import { formatDateTime } from "../util/helperfunctions";
+
 import Ticket from "./Ticket";
 
 export default function SoldTicketsList({ soldTicketsData }) {
@@ -38,12 +40,14 @@ export default function SoldTicketsList({ soldTicketsData }) {
           <Box sx={{ p: 2, border: "1px dashed grey" }}>
             <strong>Sale event {soldTicketsData.id} successful!</strong>
             <br />
-            <strong>Sale posted at: {soldTicketsData.paidAt}</strong>
+            <strong>
+              Sale posted at: {formatDateTime(soldTicketsData.paidAt)}
+            </strong>
             <br />
             <strong>Sold by user: {soldTicketsData.userId}</strong>
             <br />
           </Box>
-          <Table size="small">
+          {/* <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Event</TableCell>
@@ -64,7 +68,7 @@ export default function SoldTicketsList({ soldTicketsData }) {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </Table> */}
           <PDFViewer width="100%" height="600px">
             <Ticket tickets={tickets} />
           </PDFViewer>

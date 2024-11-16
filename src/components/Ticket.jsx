@@ -6,29 +6,85 @@ import {
   Document,
   StyleSheet,
   Image,
+  Font,
 } from "@react-pdf/renderer";
 import QRCode from "qrcode";
+
+import { formatDateTime } from "../util/helperfunctions";
+
+// Register fonts
+Font.register({
+  family: "Helvetica",
+  fonts: [
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf_viewer.css",
+    },
+    {
+      src: "https://fonts.cdnfonts.com/s/9461/helvetica-neue-bold.woff",
+      fontWeight: "bold",
+    },
+  ],
+});
 
 // Styles
 const styles = StyleSheet.create({
   page: {
-    flexDirection: "row",
+    flexDirection: "column",
     backgroundColor: "#E4E4E4",
-  },
-  section: {
-    margin: 10,
     padding: 10,
+  },
+  ticketRow: {
+    flexDirection: "row",
+    fontSize: 12,
+    borderBottomColor: "#000",
+    borderBottomWidth: 1,
+    borderBottomStyle: "dashed",
+    marginBottom: 20,
+    paddingBottom: 10,
+  },
+  qrSection: {
+    margin: 10,
     flexGrow: 1,
+  },
+  detailsSection: {
+    marginTop: 30,
+    flexGrow: 2,
+    paddingHorizontal: 10,
+  },
+  ticketDetails: {
+    flexDirection: "row",
+    marginBottom: 5,
+  },
+  leftColumn: {
+    width: 100, // Fixed width for alignment
+    fontWeight: "bold",
+    fontSize: 12,
+  },
+  rightColumn: {
+    flexGrow: 1, // Take remaining space
+    fontSize: 12,
+  },
+  bottomRow: {
+    marginTop: 20,
+    paddingTop: 10,
+    fontSize: 10,
+    textAlign: "center",
+    alignItems: "center",
+  },
+  bottomParagraph: {
+    marginLeft: 10,
+    marginBottom: 20,
+  },
+  bottomTitle: {
+    fontSize: 14,
+    color: "#0303F1",
+    fontWeight: "bold",
+    marginBottom: 20,
   },
   qrCode: {
     width: 128,
     height: 128,
-    marginBottom: 20,
-  },
-  loadingText: {
-    margin: 20,
-    fontSize: 18,
-    textAlign: "center",
+    marginBottom: 10,
   },
 });
 
@@ -75,29 +131,95 @@ const Ticket = ({ tickets }) => {
   }, [tickets]);
 
   if (!preparedTickets) {
-    // Display loading message
-    return (
-      <Document>
-        <Page size="A4" style={styles.page}>
-          <Text style={styles.loadingText}>Loading tickets...</Text>
-        </Page>
-      </Document>
-    );
+    return <p className="text-center">Loading tickets...</p>;
   }
 
   return (
     <Document>
       {preparedTickets.map((ticket, index) => (
         <Page key={index} size="A4" style={styles.page}>
-          <View style={styles.section}>
-            {ticket.qrCode && (
-              <Image style={styles.qrCode} src={ticket.qrCode} />
-            )}
-            <Text>{ticket.event?.name || "Unknown Event"}</Text>
-            <Text>{ticket.ticketType?.name || "Unknown Ticket Type"}</Text>
-            <Text>{ticket.venue?.name || "Unknown Venue"}</Text>
-            <Text>{ticket.price?.toFixed(2) || "0.00"}</Text>
-            <Text>{ticket.barcode || "No Barcode"}</Text>
+          {/* Ticket Top Row */}
+          <View style={styles.ticketRow}>
+            {/* QR Code Section */}
+            <View style={styles.qrSection}>
+              {ticket.qrCode && (
+                <Image style={styles.qrCode} src={ticket.qrCode} />
+              )}
+            </View>
+
+            {/* Ticket Details Section */}
+            <View style={styles.detailsSection}>
+              <View style={styles.ticketDetails}>
+                <Text style={styles.leftColumn}>Event:</Text>
+                <Text style={styles.rightColumn}>
+                  {ticket.event?.name || "Unknown Event"}
+                </Text>
+              </View>
+              <View style={styles.ticketDetails}>
+                <Text style={styles.leftColumn}>Ticket Type:</Text>
+                <Text style={styles.rightColumn}>
+                  {ticket.ticketType?.name || "Unknown Ticket Type"}
+                </Text>
+              </View>
+              <View style={styles.ticketDetails}>
+                <Text style={styles.leftColumn}>Venue:</Text>
+                <Text style={styles.rightColumn}>
+                  {ticket.venue?.name || "Unknown Venue"}
+                </Text>
+              </View>
+              <View style={styles.ticketDetails}>
+                <Text style={styles.leftColumn}>Price:</Text>
+                <Text style={styles.rightColumn}>
+                  {ticket.price?.toFixed(2) || "0.00"} €
+                </Text>
+              </View>
+              <View style={styles.ticketDetails}>
+                <Text style={styles.leftColumn}>Time:</Text>
+                <Text style={styles.rightColumn}>
+                  {formatDateTime(ticket.event?.beginsAt || new Date())}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Bottom Row */}
+          <View style={styles.bottomRow}>
+            <Text style={styles.bottomTitle}>Ticket #{index + 1}</Text>
+            <Text style={styles.bottomParagraph}>
+              Terms and Conditions: The ticket is non-refundable. For further
+              information, visit ticketguru.store.
+            </Text>
+            <Text style={styles.bottomParagraph}>Event Details: </Text>
+            <Text style={styles.bottomParagraph}>
+              Venue: {ticket.venue?.name || "Unknown Venue"}
+            </Text>
+            <Text style={styles.bottomParagraph}>
+              Event: {ticket.event?.name || "Unknown Event"}
+            </Text>
+            <Text style={styles.bottomParagraph}>
+              Time:{" "}
+              {new Date(ticket.event?.beginsAt || new Date())
+                .toLocaleDateString("fi-FI", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+                .replace(",", "")}
+            </Text>
+            <Text style={styles.bottomParagraph}>
+              Ticket Type: {ticket.ticketType?.name || "Unknown Ticket Type"}
+            </Text>
+            <Text style={styles.bottomParagraph}>
+              Price: {ticket.price?.toFixed(2) || "0.00"} €
+            </Text>
+            <Text style={styles.bottomParagraph}>
+              {ticket.event?.description || "No description available"}
+            </Text>
+            <Text style={styles.bottomParagraph}>
+              Ticket Number: {ticket.barcode}
+            </Text>
           </View>
         </Page>
       ))}
