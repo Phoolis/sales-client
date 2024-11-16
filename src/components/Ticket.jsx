@@ -7,22 +7,27 @@ import {
   StyleSheet,
   Image,
   Font,
+  Link,
 } from "@react-pdf/renderer";
 import QRCode from "qrcode";
 
 import { formatDateTime } from "../util/helperfunctions";
 
+// Font source
+const fontNormal =
+  "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf";
+const fontBold =
+  "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf";
+const fontItalic =
+  "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-italic-webfont.ttf";
+
 // Register fonts
 Font.register({
-  family: "Helvetica",
+  family: "Roboto",
   fonts: [
-    {
-      src: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf_viewer.css",
-    },
-    {
-      src: "https://fonts.cdnfonts.com/s/9461/helvetica-neue-bold.woff",
-      fontWeight: "bold",
-    },
+    { src: fontNormal },
+    { src: fontBold, fontWeight: "bold" },
+    { src: fontItalic, fontStyle: "italic" },
   ],
 });
 
@@ -32,6 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#E4E4E4",
     padding: 10,
+    fontFamily: "Roboto",
   },
   ticketRow: {
     flexDirection: "row",
@@ -56,28 +62,41 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   leftColumn: {
-    width: 100, // Fixed width for alignment
+    width: 100,
     fontWeight: "bold",
     fontSize: 12,
   },
   rightColumn: {
-    flexGrow: 1, // Take remaining space
+    flexGrow: 1,
     fontSize: 12,
   },
   bottomRow: {
     marginTop: 20,
     paddingTop: 10,
     fontSize: 10,
-    textAlign: "center",
     alignItems: "center",
   },
   bottomParagraph: {
-    marginLeft: 10,
+    flexDirection: "row",
+    marginVertical: 2,
+  },
+  definition: {
+    fontWeight: "bold",
+    marginRight: 5,
+  },
+  definitionValue: {
+    flexGrow: 1,
+  },
+  description: {
+    flexGrow: 1,
+    fontSize: 10,
+    fontStyle: "italic",
+    marginTop: 20,
     marginBottom: 20,
   },
   bottomTitle: {
-    fontSize: 14,
-    color: "#0303F1",
+    fontSize: 18,
+    color: "#0A74DA", // Adjusted color
     fontWeight: "bold",
     marginBottom: 20,
   },
@@ -184,42 +203,49 @@ const Ticket = ({ tickets }) => {
 
           {/* Bottom Row */}
           <View style={styles.bottomRow}>
-            <Text style={styles.bottomTitle}>Ticket #{index + 1}</Text>
-            <Text style={styles.bottomParagraph}>
-              Terms and Conditions: The ticket is non-refundable. For further
-              information, visit ticketguru.store.
-            </Text>
-            <Text style={styles.bottomParagraph}>Event Details: </Text>
-            <Text style={styles.bottomParagraph}>
-              Venue: {ticket.venue?.name || "Unknown Venue"}
-            </Text>
-            <Text style={styles.bottomParagraph}>
-              Event: {ticket.event?.name || "Unknown Event"}
-            </Text>
-            <Text style={styles.bottomParagraph}>
-              Time:{" "}
-              {new Date(ticket.event?.beginsAt || new Date())
-                .toLocaleDateString("fi-FI", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-                .replace(",", "")}
-            </Text>
-            <Text style={styles.bottomParagraph}>
-              Ticket Type: {ticket.ticketType?.name || "Unknown Ticket Type"}
-            </Text>
-            <Text style={styles.bottomParagraph}>
-              Price: {ticket.price?.toFixed(2) || "0.00"} €
-            </Text>
-            <Text style={styles.bottomParagraph}>
-              {ticket.event?.description || "No description available"}
-            </Text>
-            <Text style={styles.bottomParagraph}>
-              Ticket Number: {ticket.barcode}
-            </Text>
+            <Text style={styles.bottomTitle}>Event Details</Text>
+            <View style={styles.bottomParagraph}>
+              <Text style={styles.definition}>Event:</Text>
+              <Text style={styles.definitionValue}>
+                {ticket.event?.name || "Unknown Event"}
+              </Text>
+            </View>
+            <View style={styles.bottomParagraph}>
+              <Text style={styles.definition}>Venue:</Text>
+              <Text style={styles.definitionValue}>
+                {ticket.venue?.name || "Unknown Venue"}
+              </Text>
+            </View>
+            <View style={styles.bottomParagraph}>
+              <Text style={styles.definition}>Time:</Text>
+              <Text style={styles.definitionValue}>
+                {formatDateTime(ticket.event?.beginsAt || new Date())}
+              </Text>
+            </View>
+            <View style={styles.bottomParagraph}>
+              <Text style={styles.definition}>Ticket Type:</Text>
+              <Text style={styles.definitionValue}>
+                {ticket.ticketType?.name || "Unknown Ticket Type"}
+              </Text>
+            </View>
+            <View style={styles.bottomParagraph}>
+              <Text style={styles.definition}>Price:</Text>
+              <Text style={styles.definitionValue}>
+                {ticket.price?.toFixed(2) || "0.00"} €
+              </Text>
+            </View>
+            <View style={styles.bottomParagraph}>
+              <Text style={styles.description}>
+                {ticket.event?.description || "No description available"}
+              </Text>
+            </View>
+            <View style={styles.bottomParagraph}>
+              <Text style={styles.definition}>Terms and Conditions:</Text>
+              <Text style={styles.definitionValue}>
+                The ticket is non-refundable. For further information, visit{" "}
+                <Link src="https://ticketguru.store">ticketguru.store</Link>.
+              </Text>
+            </View>
           </View>
         </Page>
       ))}
