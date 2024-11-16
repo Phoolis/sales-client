@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { fetchEvents } from "../util/api";
 import { useSettings } from "./SettingsContext";
 
+import { formatDateTime } from "../util/helperfunctions";
+
 export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   const settings = useSettings(); // url and auth header information
   const [events, setEvents] = useState([]);
@@ -87,15 +89,17 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
           </TableRow>
           <TableRow>
             <TableCell>Event begins</TableCell>
-            <TableCell>{selectedEvent?.beginsAt || ""}</TableCell>
+            <TableCell>{formatDateTime(selectedEvent?.beginsAt)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Event ends</TableCell>
-            <TableCell>{selectedEvent?.endsAt || ""}</TableCell>
+            <TableCell>{formatDateTime(selectedEvent?.endsAt)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Ticket sale begins </TableCell>
-            <TableCell>{selectedEvent?.ticketSaleBegins || ""}</TableCell>
+            <TableCell>
+              {formatDateTime(selectedEvent?.ticketSaleBegins)}
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>

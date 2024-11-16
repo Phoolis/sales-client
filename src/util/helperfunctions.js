@@ -1,4 +1,5 @@
 export function formatDateTime(dateTime) {
+  if (!dateTime) return "";
   return new Date(dateTime)
     .toLocaleDateString("fi-FI", {
       day: "2-digit",
