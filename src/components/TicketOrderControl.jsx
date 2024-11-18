@@ -22,7 +22,7 @@ export default function TicketOrderControl({
   selectedEventId,
   selectedEventName,
   selectedTicketTypeId,
-  setSelectedTicketTypeId
+  setSelectedTicketTypeId,
 }) {
   const settings = useSettings(); // url and auth header info
   const [ticketTypes, setTicketTypes] = useState([]);
@@ -83,11 +83,27 @@ export default function TicketOrderControl({
   };
 
   const handlePriceChange = (e) => {
-    setPrice(Number(e.target.value));
+    const newPrice = Number(e.target.value);
+    if (newPrice >= 0) {
+      setPrice(newPrice);
+    } else {
+      setPrice(0);
+    }
   };
 
   const handleAmountChange = (e) => {
-    setAmount(Number(e.target.value));
+    const input = e.target.value;
+    let newAmount = 1;
+    try {
+      newAmount = parseInt(input);
+    } catch (error) {
+      setAmount(1);
+    }
+    if (newAmount >= 1) {
+      setAmount(newAmount);
+    } else {
+      setAmount(1);
+    }
   };
 
   return (
@@ -96,10 +112,11 @@ export default function TicketOrderControl({
         <FormControl fullWidth>
           <InputLabel>Ticket type</InputLabel>
           <Select
-            id='ticketTypeSelect'
+            id="ticketTypeSelect"
             value={selectedTicketTypeId}
             onChange={handleChange}
-            label='Ticket type'>
+            label="Ticket type"
+          >
             <MenuItem value={0}>Select ticket type</MenuItem>
             {ticketTypes.map((ticketType) => (
               <MenuItem key={ticketType.id} value={ticketType.id}>
@@ -110,7 +127,7 @@ export default function TicketOrderControl({
         </FormControl>
       </>
       <>
-        <Table size='small'>
+        <Table size="small">
           <TableBody>
             <TableRow>
               <TableCell>Ticket type</TableCell>
@@ -127,8 +144,8 @@ export default function TicketOrderControl({
             <TableRow>
               <TableCell>
                 <TextField
-                  label='Price'
-                  type='number'
+                  label="Price"
+                  type="number"
                   value={price}
                   onChange={handlePriceChange}
                   slotProps={{
@@ -138,7 +155,7 @@ export default function TicketOrderControl({
                     },
                     input: {
                       endAdornment: (
-                        <InputAdornment position='end'>€</InputAdornment>
+                        <InputAdornment position="end">€</InputAdornment>
                       ),
                     },
                   }}
@@ -146,17 +163,18 @@ export default function TicketOrderControl({
               </TableCell>
               <TableCell>
                 <TextField
-                  label='Amount'
-                  type='number'
+                  label="Amount"
+                  type="number"
                   value={amount}
                   onChange={handleAmountChange}
                   slotProps={{
                     htmlInput: {
                       min: 1,
+                      step: 1,
                     },
                     input: {
                       endAdornment: (
-                        <InputAdornment position='end'>tickets</InputAdornment>
+                        <InputAdornment position="end">tickets</InputAdornment>
                       ),
                     },
                   }}
@@ -167,8 +185,8 @@ export default function TicketOrderControl({
         </Table>
 
         <Button
-          color='primary'
-          variant='contained'
+          color="primary"
+          variant="contained"
           onClick={() =>
             handleAddToBasket(
               selectedTicketType,
@@ -176,7 +194,8 @@ export default function TicketOrderControl({
               price,
               selectedEventName
             )
-          }>
+          }
+        >
           Add to Basket
         </Button>
       </>

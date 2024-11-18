@@ -20,14 +20,18 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
   const settings = useSettings(); // url and auth header information
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getEvents = async () => {
       try {
+        setLoading(true);
         const fetchedEvents = await fetchEvents(settings);
         setEvents(fetchedEvents);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
     getEvents();
@@ -55,18 +59,21 @@ export default function EventDropDown({ selectedEventId, setSelectedEventId }) {
     }
   }, [selectedEvent]);
 
-  return (
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
     <Stack>
       <FormControl fullWidth>
-        <InputLabel>Event</InputLabel>
+        <InputLabel id="event-label">Event</InputLabel>
         <Select
           id="eventSelect"
           value={selectedEventId}
+          labelId="event-label"
           onChange={handleChange}
           label="Event"
         >
           <MenuItem value={0}>Select an event</MenuItem>
-          {events.map((event) => (
+          {events?.map((event) => (
             <MenuItem key={event.id} value={event.id}>
               {event.name}
             </MenuItem>
