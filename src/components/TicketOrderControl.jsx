@@ -142,6 +142,9 @@ export default function TicketOrderControl({
                   value={amount}
                   onChange={handleAmountChange}
                   slotProps={{
+                    htmlInput: {
+                      min: 1,
+                    },
                     input: {
                       endAdornment: (
                         <InputAdornment position='end'>tickets</InputAdornment>
