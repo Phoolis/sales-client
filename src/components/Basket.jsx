@@ -19,7 +19,8 @@ export default function Basket({ setSoldTicketsData }) {
     { field: "price", width: 100 },
     { field: "quantity", width: 100 },
     {
-      headerName: "Subtotal (€)", width: 100,
+      headerName: "Subtotal (€)",
+      width: 100,
       valueGetter: (params) => params.data.price * params.data.quantity,
       valueFormatter: (params) => params.value.toFixed(2),
     },
@@ -27,13 +28,15 @@ export default function Basket({ setSoldTicketsData }) {
       headerName: "",
       cellRenderer: (params) => (
         <>
-          <Button color="primary" onClick={() => plusOneTicket(params.data)}>
+          <Button color='primary' onClick={() => plusOneTicket(params.data)}>
             <Add />
           </Button>
-          <Button color={params.data.quantity != 1 ? "primary" : "gray"} onClick={() => minusOneTicket(params.data)}>
+          <Button
+            color={params.data.quantity != 1 ? "primary" : "gray"}
+            onClick={() => minusOneTicket(params.data)}>
             <Remove />
           </Button>
-          <Button color="error" onClick={() => removeFromBasket(params.data)}>
+          <Button color='error' onClick={() => removeFromBasket(params.data)}>
             <DeleteForever />
           </Button>
         </>
@@ -71,11 +74,10 @@ export default function Basket({ setSoldTicketsData }) {
   return (
     <>
       <div
-        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}
-      >
+        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}>
         Grand Total: {grandTotal}€
       </div>
-      <div className="ag-theme-material" style={{ height: 400 }}>
+      <div className='ag-theme-material' style={{ height: 400 }}>
         <AgGridReact
           rowData={basket}
           columnDefs={columnDefs}
@@ -84,10 +86,10 @@ export default function Basket({ setSoldTicketsData }) {
         />
       </div>
 
-      <Button color="success" variant="contained" onClick={handleConfirmSale}>
+      <Button color='success' variant='contained' onClick={handleConfirmSale}>
         Confirm sale
       </Button>
-      <Button color="error" onClick={handleClearBasket}>
+      <Button color='error' onClick={handleClearBasket}>
         Clear basket
       </Button>
     </>
