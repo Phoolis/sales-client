@@ -77,10 +77,11 @@ export default function Basket({ setSoldTicketsData }) {
         style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}>
         Grand Total: {grandTotal}€
       </div>
-      <div className='ag-theme-material' style={{ height: 400 }}>
+      <div className='ag-theme-material' style={{ height: "100%" }}>
         <AgGridReact
           rowData={basket}
           columnDefs={columnDefs}
+          domLayout='autoHeight'
           groupTotalRow={true}
           autoSizeStrategy={autoSizeStrategy}
         />
