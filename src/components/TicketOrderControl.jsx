@@ -87,11 +87,10 @@ export default function TicketOrderControl({
         <FormControl fullWidth>
           <InputLabel>Ticket type</InputLabel>
           <Select
-            id="ticketTypeSelect"
+            id='ticketTypeSelect'
             value={selectedTicketTypeId}
             onChange={handleChange}
-            label="Ticket type"
-          >
+            label='Ticket type'>
             <MenuItem value={0}>Select ticket type</MenuItem>
             {ticketTypes.map((ticketType) => (
               <MenuItem key={ticketType.id} value={ticketType.id}>
@@ -102,7 +101,7 @@ export default function TicketOrderControl({
         </FormControl>
       </>
       <>
-        <Table size="small">
+        <Table size='small'>
           <TableBody>
             <TableRow>
               <TableCell>Ticket type</TableCell>
@@ -119,17 +118,18 @@ export default function TicketOrderControl({
             <TableRow>
               <TableCell>
                 <TextField
-                  label="Price"
-                  type="number"
+                  label='Price'
+                  type='number'
                   value={price}
                   onChange={handlePriceChange}
                   slotProps={{
                     htmlInput: {
                       step: 0.01,
+                      min: 0,
                     },
                     input: {
                       endAdornment: (
-                        <InputAdornment position="end">€</InputAdornment>
+                        <InputAdornment position='end'>€</InputAdornment>
                       ),
                     },
                   }}
@@ -137,14 +137,14 @@ export default function TicketOrderControl({
               </TableCell>
               <TableCell>
                 <TextField
-                  label="Amount"
-                  type="number"
+                  label='Amount'
+                  type='number'
                   value={amount}
                   onChange={handleAmountChange}
                   slotProps={{
                     input: {
                       endAdornment: (
-                        <InputAdornment position="end">tickets</InputAdornment>
+                        <InputAdornment position='end'>tickets</InputAdornment>
                       ),
                     },
                   }}
@@ -155,8 +155,8 @@ export default function TicketOrderControl({
         </Table>
 
         <Button
-          color="primary"
-          variant="contained"
+          color='primary'
+          variant='contained'
           onClick={() =>
             handleAddToBasket(
               selectedTicketType,
@@ -164,8 +164,7 @@ export default function TicketOrderControl({
               price,
               selectedEventName
             )
-          }
-        >
+          }>
           Add to Basket
         </Button>
       </>
