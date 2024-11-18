@@ -9,6 +9,7 @@ export default function TicketSales() {
   const [selectedEventId, setSelectedEventId] = useState(0);
   const [selectedEventName, setSelectedEventName] = useState("");
   const [soldTicketsData, setSoldTicketsData] = useState(null);
+  const [selectedTicketTypeId, setSelectedTicketTypeId] = useState(0);
 
   const handleEventSelect = (eventId, eventName) => {
     setSelectedEventId(eventId);
@@ -32,11 +33,13 @@ export default function TicketSales() {
           <TicketOrderControl
             selectedEventId={selectedEventId}
             selectedEventName={selectedEventName}
+            selectedTicketTypeId={selectedTicketTypeId}
+            setSelectedTicketTypeId={setSelectedTicketTypeId}
           />
         </Box>
       </Stack>
       <Stack direction="column" spacing={2} width={1020}>
-        <Basket setSoldTicketsData={handleSetSoldTicketsData} />
+        <Basket setSoldTicketsData={handleSetSoldTicketsData} setSelectedEventId={setSelectedEventId} setSelectedTicketTypeId={setSelectedTicketTypeId}/>
         <SoldTicketsList soldTicketsData={soldTicketsData} />
       </Stack>
     </>

@@ -9,7 +9,7 @@ import { useSettings } from "./SettingsContext";
 import { useState, useMemo } from "react";
 import "@fontsource/roboto";
 
-export default function Basket({ setSoldTicketsData }) {
+export default function Basket({ setSoldTicketsData, setSelectedEventId, setSelectedTicketTypeId}) {
   const { basket, setBasket, removeFromBasket, plusOneTicket, minusOneTicket } =
     useBasket();
   const settings = useSettings();
@@ -56,6 +56,8 @@ export default function Basket({ setSoldTicketsData }) {
       if (response.status === 201) {
         setSoldTicketsData(response.data);
         handleClearBasket();
+        setSelectedEventId(0);
+        setSelectedTicketTypeId(0);
       }
     } catch (error) {
       console.error("Error posting basket: ", error);

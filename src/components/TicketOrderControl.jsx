@@ -21,10 +21,11 @@ import {
 export default function TicketOrderControl({
   selectedEventId,
   selectedEventName,
+  selectedTicketTypeId,
+  setSelectedTicketTypeId
 }) {
   const settings = useSettings(); // url and auth header info
   const [ticketTypes, setTicketTypes] = useState([]);
-  const [selectedTicketTypeId, setSelectedTicketTypeId] = useState(0);
   const params = new URLSearchParams([["eventId", selectedEventId]]); // query params to find ticketTypes by eventId
   const [selectedTicketType, setSelectedTicketType] = useState(null);
   const { addToBasket } = useBasket();
