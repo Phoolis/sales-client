@@ -7,6 +7,7 @@ import { useBasket } from "./BasketContext";
 import { postBasketItems } from "../util/api";
 import { useSettings } from "./SettingsContext";
 import { useState, useMemo } from "react";
+import "@fontsource/roboto";
 
 export default function Basket({ setSoldTicketsData }) {
   const { basket, setBasket, removeFromBasket, plusOneTicket, minusOneTicket } =
@@ -73,10 +74,6 @@ export default function Basket({ setSoldTicketsData }) {
 
   return (
     <>
-      <div
-        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold" }}>
-        Grand Total: {grandTotal}€
-      </div>
       <div className='ag-theme-material' style={{ height: "100%" }}>
         <AgGridReact
           rowData={basket}
@@ -86,7 +83,10 @@ export default function Basket({ setSoldTicketsData }) {
           autoSizeStrategy={autoSizeStrategy}
         />
       </div>
-
+      <div
+        style={{ textAlign: "right", marginTop: "10px", fontWeight: "bold", fontFamily: "Roboto"}}>
+        Grand Total: {grandTotal}€
+      </div>
       <Button color='success' variant='contained' onClick={handleConfirmSale}>
         Confirm sale
       </Button>
