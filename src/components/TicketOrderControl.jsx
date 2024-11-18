@@ -70,7 +70,15 @@ export default function TicketOrderControl({
     price,
     selectedEventName
   ) => {
-    addToBasket(ticketType, quantity, price, selectedEventName);
+    if (!selectedEventName && ticketType == null) {
+      alert("Please select event and ticket type!");
+    } else if (!selectedEventName) {
+      alert("Please select event!");
+    } else if (ticketType == null) {
+      alert("Please select ticket type!");
+    } else {
+      addToBasket(ticketType, quantity, price, selectedEventName);
+    }
   };
 
   const handlePriceChange = (e) => {
