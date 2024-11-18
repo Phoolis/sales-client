@@ -1,0 +1,40 @@
+import { test, expect } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import App from "../src/App";
+import "@testing-library/jest-dom/vitest";
+
+test("fetch and display events, select 'Disney on Ice'", async () => {
+  render(<App />);
+
+  // Check for the initial loading state
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+  // Debug the DOM to verify structure
+  screen.debug();
+
+  // Wait for the event dropdown to populate
+  await waitFor(() => {
+    const eventDropdown = screen.getByRole("button", { name: /event/i }); // Ensure the label matches
+    expect(eventDropdown).toBeInTheDocument();
+    expect(eventDropdown).toHaveTextContent(/select an event/i);
+  });
+
+  // Open the dropdown
+  const eventDropdown = screen.getByRole("button", { name: /event/i });
+  fireEvent.mouseDown(eventDropdown);
+
+  // Wait for dropdown options to appear
+  await waitFor(() => {
+    expect(screen.getByText(/disney on ice/i)).toBeInTheDocument();
+    expect(screen.getByText(/death metal karaoke/i)).toBeInTheDocument();
+  });
+
+  // Select "Disney on Ice"
+  const disneyOption = screen.getByText(/disney on ice/i);
+  fireEvent.click(disneyOption);
+
+  // Verify "Disney on Ice" is now selected
+  await waitFor(() => {
+    expect(eventDropdown).toHaveTextContent(/disney on ice/i);
+  });
+});

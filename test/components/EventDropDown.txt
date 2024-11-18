@@ -1,0 +1,47 @@
+import { test, expect } from "vitest";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import EventDropDown from "../../src/components/EventDropDown";
+import { SettingsProvider } from "../../src/components/SettingsContext"; // Ensure you use the correct path
+import "@testing-library/jest-dom/vitest";
+
+test("fetch and display events, select 'Disney on Ice'", async () => {
+  // Render the EventDropDown component within the SettingsProvider
+  render(
+    <SettingsProvider
+      value={{
+        url: "https://ticketguru.hellmanstudios.fi/api",
+        authHeader: "Basic dXNlcjpwYXNzd29yZA==", // Adjust with actual authorization details
+      }}
+    >
+      <EventDropDown selectedEventId={0} setSelectedEventId={() => {}} />
+    </SettingsProvider>
+  );
+
+  // Verify the initial loading state
+  expect(screen.getByText(/loading.../i)).toBeInTheDocument();
+
+  // Wait for events to load and dropdown to populate
+  await waitFor(() => {
+    const eventDropdown = screen.getByRole("combobox", { name: /event/i });
+    expect(eventDropdown).toBeInTheDocument();
+    expect(eventDropdown).toHaveTextContent(/select an event/i);
+  });
+
+  // Select an event: "Disney on Ice"
+  const eventDropdown = screen.getByRole("combobox", { name: /event/i });
+  fireEvent.change(eventDropdown, { target: { value: "2" } }); // Use the correct ID for "Disney on Ice"
+
+  // Verify that the event details are updated
+  await waitFor(() => {
+    expect(screen.getByText(/event name/i)).toBeInTheDocument();
+    expect(screen.getByText(/disney on ice/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Mikki-hiiret jäällä. Suih suih vaan!/i)
+    ).toBeInTheDocument(); // Example description
+  });
+
+  // Additional assertions for other event details
+  expect(screen.getByText(/event begins/i)).toBeInTheDocument();
+  expect(screen.getByText(/event ends/i)).toBeInTheDocument();
+  expect(screen.getByText(/ticket sale begins/i)).toBeInTheDocument();
+});
