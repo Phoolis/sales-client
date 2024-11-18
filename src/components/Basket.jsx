@@ -30,7 +30,7 @@ export default function Basket({ setSoldTicketsData }) {
           <Button color="primary" onClick={() => plusOneTicket(params.data)}>
             <Add />
           </Button>
-          <Button color="primary" onClick={() => minusOneTicket(params.data)}>
+          <Button color={params.data.quantity != 1 ? "primary" : "gray"} onClick={() => minusOneTicket(params.data)}>
             <Remove />
           </Button>
           <Button color="error" onClick={() => removeFromBasket(params.data)}>
